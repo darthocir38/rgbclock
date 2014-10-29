@@ -29,13 +29,15 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:wattpro
+LIBS:rgbclock-cache
 EELAYER 27 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "28 oct 2014"
+Date "29 oct 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -43,4 +45,235 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+$Comp
+L WATTPRO U2
+U 1 1 54501E20
+P 3150 1800
+F 0 "U2" H 3100 1800 60  0000 C CNN
+F 1 "WATTPRO" H 3100 1800 60  0000 C CNN
+F 2 "~" H 3100 1800 60  0000 C CNN
+F 3 "~" H 3100 1800 60  0000 C CNN
+	1    3150 1800
+	1    0    0    -1  
+$EndComp
+$Comp
+L WATTPRO U1
+U 1 1 54501E2F
+P 3150 4950
+F 0 "U1" H 3100 4950 60  0000 C CNN
+F 1 "WATTPRO" H 3100 4950 60  0000 C CNN
+F 2 "~" H 3100 4950 60  0000 C CNN
+F 3 "~" H 3100 4950 60  0000 C CNN
+	1    3150 4950
+	1    0    0    -1  
+$EndComp
+Text Notes 1350 1450 0    60   ~ 0
+LED Controller
+Text Notes 1400 4450 0    60   ~ 0
+Comm Controller
+Wire Wire Line
+	2600 950  2600 700 
+Wire Wire Line
+	2600 700  2200 700 
+Wire Wire Line
+	2200 700  2200 3300
+Wire Wire Line
+	2200 3300 2600 3300
+Wire Wire Line
+	2600 3300 2600 4100
+Wire Wire Line
+	2700 4100 2700 3200
+Wire Wire Line
+	2700 3200 2150 3200
+Wire Wire Line
+	2150 3200 2150 650 
+Wire Wire Line
+	2150 650  2700 650 
+Wire Wire Line
+	2700 650  2700 950 
+Wire Wire Line
+	3750 5150 3900 5150
+Wire Wire Line
+	3900 5150 3900 2000
+Wire Wire Line
+	3900 2000 3750 2000
+Wire Wire Line
+	3750 2100 3950 2100
+Wire Wire Line
+	3950 2100 3950 5250
+Wire Wire Line
+	3950 5250 3750 5250
+$Comp
+L R R?
+U 1 1 5450BB98
+P 3400 3200
+F 0 "R?" V 3480 3200 40  0000 C CNN
+F 1 "R" V 3407 3201 40  0000 C CNN
+F 2 "~" V 3330 3200 30  0000 C CNN
+F 3 "~" H 3400 3200 30  0000 C CNN
+	1    3400 3200
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R?
+U 1 1 5450BBA7
+P 3400 3400
+F 0 "R?" V 3480 3400 40  0000 C CNN
+F 1 "R" V 3407 3401 40  0000 C CNN
+F 2 "~" V 3330 3400 30  0000 C CNN
+F 3 "~" H 3400 3400 30  0000 C CNN
+	1    3400 3400
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3650 3200 3950 3200
+Connection ~ 3950 3200
+Wire Wire Line
+	3650 3400 3900 3400
+Connection ~ 3900 3400
+Wire Wire Line
+	3150 3400 2600 3400
+Connection ~ 2600 3400
+Wire Wire Line
+	3150 3200 3050 3200
+Wire Wire Line
+	3050 3200 3050 3400
+Connection ~ 3050 3400
+$Comp
+L RTC U?
+U 1 1 5450BC94
+P 5300 3350
+F 0 "U?" H 5300 3350 60  0000 C CNN
+F 1 "RTC" H 5300 3350 60  0000 C CNN
+F 2 "" H 5300 3350 60  0000 C CNN
+F 3 "" H 5300 3350 60  0000 C CNN
+	1    5300 3350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4900 3550 2700 3550
+Connection ~ 2700 3550
+Wire Wire Line
+	4600 3450 4900 3450
+Wire Wire Line
+	4600 3450 4600 3500
+Wire Wire Line
+	4600 3500 2600 3500
+Connection ~ 2600 3500
+Wire Wire Line
+	4900 3150 3900 3150
+Connection ~ 3900 3150
+Wire Wire Line
+	4900 3250 3950 3250
+Connection ~ 3950 3250
+$Comp
+L I2C_DISP U?
+U 1 1 54512DD6
+P 5300 4150
+F 0 "U?" H 5400 4150 60  0000 C CNN
+F 1 "I2C_DISP" H 5400 4150 60  0000 C CNN
+F 2 "~" H 5400 4150 60  0000 C CNN
+F 3 "~" H 5400 4150 60  0000 C CNN
+	1    5300 4150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4750 3150 4750 3950
+Wire Wire Line
+	4750 3950 4900 3950
+Connection ~ 4750 3150
+Wire Wire Line
+	4700 3250 4700 4050
+Wire Wire Line
+	4700 4050 4900 4050
+Connection ~ 4700 3250
+Wire Wire Line
+	4650 3450 4650 4900
+Wire Wire Line
+	4650 4250 4900 4250
+Connection ~ 4650 3450
+Wire Wire Line
+	4600 3550 4600 4800
+Wire Wire Line
+	4600 4350 4900 4350
+Connection ~ 4600 3550
+$Comp
+L LIGHTSENS U?
+U 1 1 54512F1D
+P 5200 1250
+F 0 "U?" H 5200 1250 60  0000 C CNN
+F 1 "LIGHTSENS" H 5200 1250 60  0000 C CNN
+F 2 "" H 5200 1250 60  0000 C CNN
+F 3 "" H 5200 1250 60  0000 C CNN
+	1    5200 1250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4100 3550 4100 1050
+Wire Wire Line
+	4100 1050 4850 1050
+Connection ~ 4100 3550
+Wire Wire Line
+	4150 3500 4150 1150
+Wire Wire Line
+	4150 1150 4850 1150
+Connection ~ 4150 3500
+Wire Wire Line
+	3850 1500 4850 1500
+Wire Wire Line
+	3850 1500 3850 650 
+Wire Wire Line
+	3850 650  3300 650 
+Wire Wire Line
+	3300 650  3300 950 
+$Comp
+L LEDS U?
+U 1 1 54513041
+P 5200 2050
+F 0 "U?" H 5200 2050 60  0000 C CNN
+F 1 "LEDS" H 5200 2050 60  0000 C CNN
+F 2 "" H 5200 2050 60  0000 C CNN
+F 3 "" H 5200 2050 60  0000 C CNN
+	1    5200 2050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4850 1850 4100 1850
+Connection ~ 4100 1850
+Wire Wire Line
+	4850 1950 4150 1950
+Connection ~ 4150 1950
+Wire Wire Line
+	3700 2600 3700 2750
+Wire Wire Line
+	3700 2750 4500 2750
+Wire Wire Line
+	4500 2750 4500 2300
+Wire Wire Line
+	4500 2300 4850 2300
+$Comp
+L IR U?
+U 1 1 5451313D
+P 5250 5000
+F 0 "U?" H 5250 5000 60  0000 C CNN
+F 1 "IR" H 5250 5000 60  0000 C CNN
+F 2 "" H 5250 5000 60  0000 C CNN
+F 3 "" H 5250 5000 60  0000 C CNN
+	1    5250 5000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3700 5750 3700 5900
+Wire Wire Line
+	3700 5900 4600 5900
+Wire Wire Line
+	4600 5900 4600 5250
+Wire Wire Line
+	4600 5250 4900 5250
+Wire Wire Line
+	4600 4800 4900 4800
+Connection ~ 4600 4350
+Wire Wire Line
+	4650 4900 4900 4900
+Connection ~ 4650 4250
 $EndSCHEMATC

@@ -1,24 +1,27 @@
+
+
+
+
 // Includes
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 #include <IRremote.h>
-
-
 #include <Time.h>  
 #include <DS1307RTC.h>
-
-// defines
 
 // Pin for LEDs
 #define IRPIN 9
 
 // Objects 
 IRrecv irrecv(IRPIN);
+
+
 LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 // mode and state defines
 #define STATE_CLOCK 0
-#define STATE_AMBIE 1
+#define STATE_AMBIE_RAIN 1
+#define STATE_AMBIE_MAN 2
 uint8_t mode = STATE_CLOCK;
 
 // Variables
@@ -80,56 +83,149 @@ void loop()
 {
   // timing
   setTime();
-  if (irrecv.decode(&results)) {
+
+  switch(mode) {
+    case STATE_CLOCK: 
+      printClockLCD();      
+      clock_ir();
+      break;
+    case STATE_AMBIE_RAIN: 
+      lcd.setCursor(1,0); 
+      lcd.print("Rainbow Mode ");
+      rain_ir();
+      break;
+    case STATE_AMBIE_MAN: 
+      lcd.setCursor(1,0); 
+      lcd.print("Ambient Mode ");
+      ambie_ir();
+      break;
+
+  }
+ }
+
+void clock_ir(){
+ if (irrecv.decode(&results)) {
     switch(results.value){
       case 0x77E150DA: 
         // +
-        mode = 1;
+        //mode = 1;
         break; 
       case 0x77E160DA: 
         // >>
-        mode = 2;
+        //mode = 2;
         break; 
       case 0x77E190DA: 
         // << 
-        mode = 3;
+        //mode = 3;
         break; 
       case 0x77E130DA: 
         // -
-        mode = 4;
+        //mode = 4;
         break; 
       case 0x77E1A0DA: 
         // >||
-        mode = 5;
+        //mode = 5;
         break; 
       case 0x77E1C0DA: 
         // menu
-        //mode++;
-        //if(mode==2) mode = 0;
-        mode = 6;
+        mode++;
+        if(mode==3) mode = 0;
+        //mode = 6;
         break; 
       default: 
-        mode = 8;
+        //mode = 8;
         break;
   }
-  lcd.setCursor(0,0); lcd.print("Simple Clock "); lcd.print(results.value,16);
+  
   irrecv.resume(); // Receive the next value
+  } 
+}
+
+void rain_ir(){
+ if (irrecv.decode(&results)) {
+    switch(results.value){
+      case 0x77E150DA: 
+        // +
+        //mode = 1;
+        break; 
+      case 0x77E160DA: 
+        // >>
+        //mode = 2;
+        break; 
+      case 0x77E190DA: 
+        // << 
+        //mode = 3;
+        break; 
+      case 0x77E130DA: 
+        // -
+        //mode = 4;
+        break; 
+      case 0x77E1A0DA: 
+        // >||
+        //mode = 5;
+        break; 
+      case 0x77E1C0DA: 
+        // menu
+        mode++;
+        if(mode==3) mode = 0;
+        //mode = 6;
+        break; 
+      default: 
+        //mode = 8;
+        break;
   }
   
+  irrecv.resume(); // Receive the next value
+  } 
+}
+
+void ambie_ir(){
+ if (irrecv.decode(&results)) {
+    switch(results.value){
+      case 0x77E150DA: 
+        // +
+        //mode = 1;
+        break; 
+      case 0x77E160DA: 
+        // >>
+        //mode = 2;
+        break; 
+      case 0x77E190DA: 
+        // << 
+        //mode = 3;
+        break; 
+      case 0x77E130DA: 
+        // -
+        //mode = 4;
+        break; 
+      case 0x77E1A0DA: 
+        // >||
+        //mode = 5;
+        break; 
+      case 0x77E1C0DA: 
+        // menu
+        mode++;
+        if(mode==3) mode = 0;
+        //mode = 6;
+        break; 
+      default: 
+        //mode = 8;
+        break;
+  }
   
-  
- }
+  irrecv.resume(); // Receive the next value
+  } 
+}
 
 
-/*
+
 void printClockLCD(){
-  lcd.setCursor(0,1);
+  lcd.setCursor(1,0);
   lcd.print("Time: ");if(hour24<10) lcd.print(0); lcd.print(hour24, DEC);
   lcd.print(" : ");   if(curr_minute<10) lcd.print(0); lcd.print(curr_minute, DEC);
   lcd.print(" : ");   if(currentsecond<10) lcd.print(0); lcd.print(currentsecond, DEC);	
-  lcd.setCursor(0,2); if(light<100) lcd.print(0);lcd.print(light, DEC);
 }
-*/
+
 void setTime(){
    t = now();
    currenttime = millis();
