@@ -38,6 +38,10 @@
 #define SECC_B 0
 
 
+#define I2C_COMM 1
+#define I2C_LED 2
+
+
 
 // Objects 
 CRGB leds[NUM_LEDS];
@@ -53,6 +57,9 @@ CRGB ledsecc;
 #define STATE_AMBIE_MAN 2
 uint8_t mode = STATE_AMBIE_RAIN;
 
+#define CMD_STATE 0
+#define CMD_AMBIE 1
+
 // Variables L.
 const int numReadings = 20;
 int readings[numReadings];      // the readings from the analog input
@@ -64,6 +71,10 @@ int average = 0;                // the average
 // globaler Helligkeitswert
 uint8_t gvalue = 100;
 
+// Ambie var
+uint8_t ambie_r = 0;
+uint8_t ambie_g = 0;
+uint8_t ambie_b = 0;
 // time cache
 
 time_t t;
@@ -97,8 +108,8 @@ int counter = 0;
 // Setup function
 void setup()
 {
-  Wire.begin(2);
-  Wire.onRequest(sendData);
+  Wire.begin(I2C_LED);
+  //Wire.onRequest(sendData);
   Wire.onReceive(receiveData); 
   Serial.begin(115200);
 
@@ -130,37 +141,33 @@ void loop()
   setTime();  
    if(currenttime - lasttime > 45) {
       switch(mode){
-      case STATE_CLOCK: clockMode(); break;
-      case STATE_AMBIE_RAIN: RainBowMode(); break;
+      case STATE_CLOCK: 
+        clockMode(); 
+        break;   
+      case STATE_AMBIE_RAIN: 
+        RainBowMode(); 
+        break;
+      case STATE_AMBIE_MAN: 
+        lightPixels(ambie_r,ambie_g,ambie_b);
+        break;
+
       default: clockMode();
-      }redraw = 1;
+      }
+      
+      redraw = 1;
       lasttime = currenttime;
     } else {
       // if nothing to do average the ligth
       volatile int newligth = analogRead(LIGHT_SENSOR); 
       
       total= total - readings[index];
-      //Serial.print("Index: ");       
-      //Serial.print(index);           
-      //Serial.print(" Old: ");       
-      //Serial.print(readings[index]);       
       readings[index] = newligth; 
       total= total + readings[index];       
       index = index + 1;                    
       if (index >= numReadings) index = 0;           
-      average = total / numReadings;    
-      //Serial.print(" Akt: ");       
-      //Serial.print(readings[index]);      
-      //Serial.print(" Akt: ");       
-      //Serial.print(newligth);       
-      //Serial.print(" Tot: ");       
-      //Serial.print(total);         
-      //Serial.print(" Avg. ");             
-      //Serial.println(average);       
+      average = total / numReadings;     
     }
-    
-   //delay(1000);
-   // redraw if needed
+       // redraw if needed
   if(redraw) {
     FastLED.show((average>>3)+5);
     redraw = 0;
@@ -228,8 +235,6 @@ void RainBowMode(){
   if(counter == 256) counter = 0;
 }
 
-
-
 // set the correct pixels
 int pixelCheck(int i) {
   if (i>59) {
@@ -249,7 +254,7 @@ void lightPixels(byte r,byte g,byte b) {
   }
 }
 
-
+/*
 void sendData()
 {
   // Byte Array for sending Data
@@ -260,24 +265,26 @@ void sendData()
   // send Data
   Wire.write(bytes,2); 
 }
-
-#define CMD_CLK 1
-#define CMD_TIM 2
+*/
 void receiveData(int numBytes)
 {
+  //Serial.print("Rec Data: ");  
   int command = Wire.read();
   switch (command) {
-  case CMD_CLK: break;
-  case CMD_TIM: break;
+  case CMD_STATE: 
+    mode = Wire.read();
+    break;
+  case CMD_AMBIE:
+    ambie_r = Wire.read();
+    ambie_g = Wire.read();
+    ambie_b = Wire.read();
+    break;
   default: break;
   }
   
-  while(1 < Wire.available()) // loop through all but the last
+  while(Wire.available()) // loop through all but the last
   {
     char c = Wire.read(); // receive byte as a character
-    Serial.print(c);         // print the character
   }
-  int x = Wire.read();    // receive byte as an integer
-  Serial.println(x);         // print the integer
 }
 
